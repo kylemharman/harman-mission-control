@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "mission-control-87981"
+  },
+  "targets": {
+    "mission-control-87981": {
+      "hosting": {
+        "mission-control": [
+          "mission-control-87981"
+        ]
+      }
+    }
+  }
+}

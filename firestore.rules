@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  	match /users/{userId} {
+      allow write, read: if isUser(userId)
+    }
+    
+	  match /workspaces/{workspaceId} {      
+      allow create: if isAuthenticated()
+      allow get, update: if hasAccessToWorkspace(workspaceId)
+      
+      match /tasks/{document=**} {
+        allow write, read: if hasAccessToWorkspace(workspaceId)
+      }
+      
+      match /members/{memberId} {  
+        allow create: if isWorkspaceCreator(workspaceId)
+        allow update: if isWorkspaceMember() || hasInvite()
+        allow read: if hasAccessToWorkspace(workspaceId)
+      }
+		}
+    
+    match /{path=**}/members/{memberId} {
+      allow read: if isAuthenticated()
+    }
+    
+    function isAuthenticated() {
+    	return request.auth != null
+    }
+    
+    function isUser(userId) {
+    	return isAuthenticated() && request.auth.uid == userId
+    }
+    
+    function isWorkspaceMember() {
+    	return isAuthenticated() && request.auth.uid == resource.data.userUid
+    }
+    
+  	function isWorkspaceCreator(workspaceId) {
+  		return isAuthenticated() && get(/databases/$(database)/documents/workspaces/$(workspaceId)).data.createdBy == request.auth.uid
+  	}
+    
+    function hasAccessToWorkspace(workspaceId) {
+      return isAuthenticated() && 'workspaces' in request.auth.token && workspaceId in request.auth.token.workspaces
+    }
+    
+    function hasInvite() {
+    	return isAuthenticated() && request.auth.token.email == resource.data.email && resource.data.isActive == false
+    }
+  }
+}

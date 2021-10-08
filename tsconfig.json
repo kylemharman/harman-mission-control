@@ -2,7 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -19,7 +19,20 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@misson-control/core": ["src/app/core/index.ts"],
+      // feature modules
+      // "@misson-control/auth": ["src/app/modules/feature/auth/index.ts"],
+      // "@misson-control/dashboard": ["src/app/modules/feature/dashboard/index.ts"],
+      // "@misson-control/settings": ["src/app/modules/feature/settings/index.ts"],
+      // "@misson-control/shell": ["src/app/modules/feature/shell/index.ts"],
+      // "@misson-control/tasks": ["src/app/modules/feature/tasks/index.ts"],
+      // "@misson-control/workspaces": ["src/app/modules/feature/workspaces/index.ts"],
+      // shared modules
+      "@misson-control/shared": ["src/app/modules/shared/ng-shared/index.ts"],
+      "@misson-control/ng-zorro": ["src/app/modules/shared/ng-zorro/index.ts"],
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
